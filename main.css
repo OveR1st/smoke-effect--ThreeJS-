@@ -1,0 +1,4 @@
+*{margin:0;padding:0}html,body{background-color:#fff}#canvas{display:none}.c-scene{height:100vh;width:100vw;position:absolute}.c-scene__text{position:absolute;text-indent:-9999px;font-size:30px;top:50%;left:50%;transform:translate(-50%, -50%)}.c-scene__text span{text-shadow:9999px 30px 30px rgba(255,255,255,0)}.c-scene__text span.is-fadein{animation:text-smoke-fadeIn 2.5s ease forwards}.c-scene__text span.is-fadeout{animation:text-smoke-fadeOut 2.5s ease forwards}@keyframes text-smoke-fadeIn{0%{opacity:0;text-shadow:9999px 30px 30px rgba(255,255,255,0)}100%{opacity:1;text-shadow:9999px 0 0 #fff}}@keyframes text-smoke-fadeOut{0%{text-shadow:9999px 0 0 #fff}100%{text-shadow:9999px -30px 30 rgba(255,255,255,0)}}
+
+
+/*# sourceMappingURL=main.css.map*/
