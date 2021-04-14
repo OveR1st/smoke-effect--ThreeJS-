@@ -6,10 +6,29 @@ import * as dat from 'dat.gui';
 
 import Stats from "three/examples/jsm/libs/stats.module";
 
+import gsap from "gsap";
+
+import Power4 from "gsap";
+import {TimelineMax} from "gsap/TweenMax";
+
+/**
+ * Random Func
+ */
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
 /**
  * DAT GUI
  */
 const gui = new dat.GUI();
+
+let smokeParam = {
+  color: 0x0196ff,
+  cameraFov: 75,
+}
+
+gui.addColor(smokeParam, 'color').name('smokeColor');
+gui.add(smokeParam, 'cameraFov', 25, 100, 0.01);
 
 /**
  * Stats FPS
@@ -76,9 +95,12 @@ renderer.shadowMap.enabled = true;
 
 const container = document.getElementById('world');
 container.appendChild(renderer.domElement)
+/**
+ * Axes helper
+ */
 
-const axes = new THREE.AxesHelper(100)
-scene.add(axes)
+// const axes = new THREE.AxesHelper(100)
+// scene.add(axes)
 
 /**
  * Controls
@@ -104,7 +126,7 @@ scene.add(shadowLight)
 const smokeTexture = new THREE.TextureLoader()
   .load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/204808/smoke.png')
 const smokeMat = new THREE.MeshLambertMaterial({
-  color: 0x0196ff,
+  color: smokeParam.color,
   map: smokeTexture,
   transparent: true
 })
@@ -125,12 +147,68 @@ for (let i = 0; i < 150; i++) {
 
   smokeParticles.push(piece);
 }
-
+// update smoke real-time
 const animateSmoke = () => {
   for (let el of smokeParticles) {
     el.rotation.z += .003;
+    el.material.color.setHex(smokeParam.color)
   }
+
+  camera.fov = smokeParam.cameraFov;
+  camera.updateProjectionMatrix()
 }
+
+/**
+ * Text animation
+ */
+const words = [...document.querySelectorAll('.c-scene__text')]
+
+const spliteWord = (word) => {
+  return [...word].map(letter => `<span>${letter}</span>`).join('')
+}
+
+let fadeInStart = 0;
+
+words.map(word => {
+  word.innerHTML = spliteWord(word.textContent)
+
+  const newLetters = [...word.querySelectorAll('span')];
+
+  const lastText = word.getAttribute('data-last');
+
+  newLetters.map(letter => {
+    // add animation
+    const tl = new TimelineMax({
+      ease: Power4.easeOut,
+    })
+
+    if (lastText) {
+      tl
+        .to(letter, 0.5, {
+          css: {
+            className: '+=is-fadein',
+          },
+          delay: getRandomArbitrary(fadeInStart, fadeInStart + 1.5)
+        })
+    } else {
+      tl
+        .to(letter, 0.5, {
+          css: {
+            className: '+=is-fadein',
+          },
+          delay: getRandomArbitrary(fadeInStart, fadeInStart + 1.5)
+        })
+        .to(letter, 0.5, {
+          css: {
+            className: '+=is-fadeout',
+          },
+          delay: 5
+        })
+    }
+  })
+  fadeInStart += 7;
+})
+
 /**
  * Loop (tick)
  */
@@ -138,6 +216,7 @@ function loop() {
   stats.begin();
   // update smoke
   animateSmoke();
+
   controls.update();
   renderer.render(scene, camera);
   stats.end();

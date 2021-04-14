@@ -16,3 +16,51 @@ body {
 #canvas {
   display: none;
 }
+
+.c-scene {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+}
+
+.c-scene__text {
+  position: absolute;
+  text-indent: -9999px;
+  font-size: 30px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  span {
+    text-shadow: 9999px 30px 30px hsla(255, 255, 255, 0);
+
+    &.is-fadein {
+      animation: text-smoke-fadeIn 2.5s ease forwards;
+    }
+
+    &.is-fadeout {
+      animation: text-smoke-fadeOut 2.5s ease forwards;
+    }
+  }
+}
+@keyframes text-smoke-fadeIn {
+  0% {
+    opacity: 0;
+    text-shadow: 9999px 30px 30px hsla(255, 255, 255, 0);
+  }
+
+  100% {
+    opacity: 1;
+    text-shadow: 9999px 0 0 hsla(255, 255, 255, 1);
+  }
+}
+
+@keyframes text-smoke-fadeOut {
+  0% {
+    text-shadow: 9999px 0 0 hsla(255, 255, 255, 1);
+  }
+
+  100% {
+    text-shadow: 9999px -30px 30 hsla(255, 255, 255, 0);
+  }
+}
